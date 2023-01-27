@@ -53,7 +53,6 @@ export default class API {
       if (q && q !== "") params.append("q", q.trim().toLowerCase());
       url += `?${params}`;
     }
-    console.log(url);
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(response.statusText);
