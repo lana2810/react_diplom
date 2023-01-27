@@ -99,7 +99,7 @@ router.post("/api/order", async (ctx, next) => {
     owner: { phone, address },
     items,
   } = ctx.request.body;
-
+  console.log(owner, items);
   if (typeof phone !== "string") {
     return fortune(ctx, "Bad Request: Phone", 400);
   }

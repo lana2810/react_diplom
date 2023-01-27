@@ -25,8 +25,7 @@ function Order() {
     setForm((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleClickOrder = async (e) => {
-    e.preventDefault();
+  const handleClickOrder = async () => {
     const res = await API.createOrder(form);
     if (res.ok) {
       setShowPopup(true);
