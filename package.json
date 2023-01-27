@@ -1,0 +1,28 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run start\" \"npm run client\"",
+    "start": "cross-env NODE_ENV=production forever server.js",
+    "server": "cross-env NODE_ENV=development forever server.js",
+    "watch": "forever -w server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "forever": "^1.0.0",
+    "koa": "^2.7.0",
+    "koa-body": "^4.1.1",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "koa2-cors": "^2.0.6"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "cross-env": "^7.0.3"
+  }
+}
