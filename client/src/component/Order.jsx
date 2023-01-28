@@ -44,7 +44,6 @@ function Order() {
       dispatch(cartRemove());
       setForm(initialStateForm);
     } else {
-      setError(res.statusText);
       setError({
         errServer: `Извините, что то пошло не так - ${res.statusText}`,
       });
