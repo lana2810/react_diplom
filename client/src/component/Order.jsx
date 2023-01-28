@@ -4,9 +4,14 @@ import { useDispatch } from "react-redux";
 import { cartRemove } from "../redux/cartSlice";
 import API from "api";
 import Popup from "./Popup/Popup";
+import validateForm from "utils/validateForm";
 
 function Order() {
   const initialStateForm = {
+    phone: "",
+    address: "",
+  };
+  const initialStateError = {
     phone: "",
     address: "",
   };
@@ -14,18 +19,25 @@ function Order() {
   const [toggle, setToggle] = useState(false);
   const [form, setForm] = useState(initialStateForm);
   const [showPopup, setShowPopup] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(initialStateError);
 
   const handleChangeCheck = () => {
     setToggle((prevState) => !prevState);
   };
 
   const handleChange = ({ target }) => {
+    setError(initialStateError);
     const { name, value } = target;
     setForm((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleClickOrder = async () => {
+  const handleClickOrder = async (e) => {
+    e.preventDefault();
+    const err = validateForm(form);
+    if (Object.keys(err).length !== 0) {
+      setError(err);
+      return;
+    }
     const res = await API.createOrder(form);
     if (res.ok) {
       setShowPopup(true);
@@ -33,6 +45,9 @@ function Order() {
       setForm(initialStateForm);
     } else {
       setError(res.statusText);
+      setError({
+        errServer: `Извините, что то пошло не так - ${res.statusText}`,
+      });
     }
   };
   return (
@@ -44,25 +59,28 @@ function Order() {
           <div className="form-group">
             <label htmlFor="phone">Телефон</label>
             <input
-              required
-              pattern="\+?[0-9\s\-\(\)]+"
               onChange={handleChange}
-              className="form-control"
+              className={
+                error.phone ? "form-control err_border" : "form-control"
+              }
               name="phone"
               id="phone"
-              placeholder="Ваш телефон"
+              placeholder="+7(000)000-00-00"
             />
+            {error.phone && <div className="err">{error.phone}</div>}
           </div>
           <div className="form-group">
             <label htmlFor="address">Адрес доставки</label>
             <input
-              required
               onChange={handleChange}
-              className="form-control"
+              className={
+                error.address ? "form-control err_border" : "form-control"
+              }
               name="address"
               id="address"
               placeholder="Адрес доставки"
             />
+            {error.address && <div className="err">{error.address}</div>}
           </div>
           <div className="form-group form-check">
             <input
@@ -84,7 +102,7 @@ function Order() {
           >
             Оформить
           </button>
-          {error && <div>{`Извините, что-то пошло не так - ${error}`}</div>}
+          {error.errServer && <div className="err">{error.errServer}</div>}
         </form>
       </div>
     </section>

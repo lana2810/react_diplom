@@ -99,7 +99,7 @@ router.post("/api/order", async (ctx, next) => {
     owner: { phone, address },
     items,
   } = ctx.request.body;
-  console.log(owner, items);
+
   if (typeof phone !== "string") {
     return fortune(ctx, "Bad Request: Phone", 400);
   }
@@ -133,9 +133,6 @@ app.use(router.allowedMethods());
 
 if (process.env.NODE_ENV === "production") {
   app.use(koaStatic(path.join(__dirname, "client", "build")));
-  // app.get((req, res) => {
-  //   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  // });
 } else {
   console.log("development mode");
 }

@@ -79,16 +79,14 @@ export default class API {
 
   static async createOrder(data) {
     const dataOrder = localStorageService.getCart();
-    JSON.stringify({
+    const body = JSON.stringify({
       owner: data,
       items: dataOrder,
     });
+    console.log(body);
     const response = await fetch(`${process.env.REACT_APP_SERVICE_URL}order/`, {
       method: "POST",
-      body: JSON.stringify({
-        owner: data,
-        items: dataOrder,
-      }),
+      body,
       headers: {
         "Content-Type": "application/json",
       },
